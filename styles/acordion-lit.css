@@ -73,3 +73,11 @@
     max-height: 500px; /* Adjust as needed */
     display: block;
 }
+
+.back-link {
+    display: inline-block;
+    margin-top: 1rem;
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+}

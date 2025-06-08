@@ -11,7 +11,7 @@
 <body>
     <header>
         <h1>Componente Acordión (Lit)</h1>
-        <p><a href="../index.html">Volver al inicio</a></p>
+        <p><a href="../index.html" class="back-link">Volver al inicio</a></p>
     </header>
 
     <main>
@@ -118,23 +118,28 @@
             const openSecondButton = document.getElementById('open-second');
             const openThirdButton = document.getElementById('open-third');
 
-            // Set up the single-open toggle
+            // Sincronizar el estado inicial del toggle con el atributo del componente
+            singleOpenToggle.checked = acordion.hasAttribute('single-open');
+
+            // Cambiar modo singleOpen cuando se cambia el toggle
             singleOpenToggle.addEventListener('change', () => {
                 acordion.singleOpen = singleOpenToggle.checked;
                 console.log('Single open mode:', acordion.singleOpen);
             });
 
-            // Set up the control buttons
+            // Abrir todos los items
             openAllButton.addEventListener('click', () => {
                 acordion.openAll();
                 console.log('Opening all items');
             });
 
+            // Cerrar todos los items
             closeAllButton.addEventListener('click', () => {
                 acordion.closeAll();
                 console.log('Closing all items');
             });
 
+            // Abrir item por índice
             openFirstButton.addEventListener('click', () => {
                 acordion.openItem(0);
                 console.log('Opening first item');
@@ -150,15 +155,16 @@
                 console.log('Opening third item');
             });
 
-            // Listen for toggle events
+            // Escuchar evento personalizado que emite el acordeón cuando se abre o cierra una sección
             document.addEventListener('acordion-toggle', (event) => {
                 const notification = document.getElementById('notification');
                 const actionInfo = document.getElementById('action-info');
 
+                // Mostrar notificación con el header y estado (abierto/cerrado)
                 actionInfo.textContent = `Sección "${event.detail.header}" ${event.detail.isOpen ? 'abierta' : 'cerrada'}`;
                 notification.classList.add('show');
 
-                // Hide the notification after 3 seconds
+                // Ocultar la notificación después de 3 segundos
                 setTimeout(() => {
                     notification.classList.remove('show');
                 }, 3000);

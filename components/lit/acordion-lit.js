@@ -38,38 +38,54 @@ class AcordionLit extends LitElement {
     }
 
     _setupAccordion() {
-        // Wait for slotted content to be available
         setTimeout(() => {
             console.log('Setting up accordion');
-            // Get all accordion items
             const items = this.querySelectorAll('.acordion-item');
             console.log('Found accordion items:', items.length);
 
-            // Add click event listeners to headers
-            items.forEach((item, index) => {
-                const header = item.querySelector('.acordion-header');
-                const content = item.querySelector('.acordion-content');
-                console.log(`Item ${index}:`, { header, content });
+            // Si singleOpen está activo, solo permite uno abierto, cierra los demás
+            if (this.singleOpen) {
+                let openedFound = false;
+                items.forEach(item => {
+                    const header = item.querySelector('.acordion-header');
+                    const content = item.querySelector('.acordion-content');
 
-                if (header && content) {
-                    // Remove existing event listener to prevent duplicates
-                    header.removeEventListener('click', this._handleHeaderClick);
-
-                    // Add click event listener
-                    header.addEventListener('click', this._handleHeaderClick.bind(this));
-
-                    // If this item has the 'open' attribute, open it by default
-                    if (item.hasAttribute('open') && item.getAttribute('open') !== 'false') {
-                        console.log(`Opening item ${index} by default`);
+                    if (item.hasAttribute('open') && !openedFound) {
+                        openedFound = true;
                         header.classList.add('active');
                         content.classList.add('active');
-                        console.log('Header classes after default open:', header.className);
-                        console.log('Content classes after default open:', content.className);
+                    } else {
+                        header.classList.remove('active');
+                        content.classList.remove('active');
                     }
+                });
+            } else {
+                // Si no es singleOpen, abre solo los que tienen atributo 'open', cierra los demás
+                items.forEach(item => {
+                    const header = item.querySelector('.acordion-header');
+                    const content = item.querySelector('.acordion-content');
+
+                    if (item.hasAttribute('open')) {
+                        header.classList.add('active');
+                        content.classList.add('active');
+                    } else {
+                        header.classList.remove('active');
+                        content.classList.remove('active');
+                    }
+                });
+            }
+
+            // Agrega los event listeners
+            items.forEach((item, index) => {
+                const header = item.querySelector('.acordion-header');
+                if (header) {
+                    header.removeEventListener('click', this._handleHeaderClick);
+                    header.addEventListener('click', this._handleHeaderClick.bind(this));
                 }
             });
         }, 0);
     }
+
 
     _handleHeaderClick(event) {
         const header = event.currentTarget;
