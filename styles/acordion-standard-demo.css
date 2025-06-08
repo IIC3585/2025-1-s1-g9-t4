@@ -1,0 +1,118 @@
+.acordion-item {
+    margin: 0;
+    padding: 0;
+}
+
+.acordion-header {
+    margin: 0;
+    position: relative;
+    padding: 15px 20px;
+    padding-right: 30px;
+    background-color: #ffffff;
+    color: #2c3e50;
+    font-weight: bold;
+    cursor: pointer;
+    border-bottom: 1px solid #e1e1e1;
+}
+
+.acordion-header::after {
+    content: '+';
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.acordion-header.active {
+    background-color: #4a6da7;
+    color: white;
+}
+
+.acordion-header.active::after {
+    content: '-';
+}
+
+.acordion-content {
+    background-color: #f8f9fa;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+    padding: 0;
+    display: block;
+}
+
+.acordion-content.active {
+    max-height: 1000px; /* Adjust as needed */
+    padding: 15px;
+    display: block;
+}
+
+.acordion-content p {
+    margin: 0 0 10px 0;
+}
+
+.acordion-content p:last-child {
+    margin-bottom: 0;
+}
+
+
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #4a6da7;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: translateX(200%);
+    transition: transform 0.3s ease-in-out;
+    z-index: 1000;
+}
+
+.notification.show {
+    transform: translateX(0);
+}
+
+/* Estilos para la información de suscripción en el acordeón */
+.suscripcion-description {
+    margin-bottom: 20px;
+}
+
+.suscripcion-description p {
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 15px;
+}
+
+.feature-list {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+}
+
+.feature-item {
+    margin: 8px 0;
+    padding: 0;
+}
+
+.suscripcion-price {
+    background-color: #f0f4f8;
+    padding: 15px;
+    border-radius: 5px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.suscripcion-price .price {
+    color: #e74c3c;
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+.suscripcion-price .period {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+    margin: 5px 0 0 0;
+}

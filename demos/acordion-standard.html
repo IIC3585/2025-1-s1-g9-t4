@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Componente Acordión (Standard) - Demo</title>
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/acordion-standard-demo.css">
+    <script src="../components/standard/acordion.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Componente Acordión (Standard)</h1>
+        <p><a href="../index.html">Volver al inicio</a></p>
+    </header>
+
+    <main>
+        <section>
+
+            <acordion id="demo-acordion" single-open="true">
+                <!-- Plan Básico -->
+                <div class="acordion-item" open="true">
+                    <div class="acordion-header">Plan Básico</div>
+                    <div class="acordion-content">
+                        <div class="suscripcion-description">
+                            <p>Un plan básico ideal para usuarios individuales que necesitan funcionalidades esenciales.</p>
+                            <ul class="feature-list">
+                                <li class="feature-item">✓ Acceso básico</li>
+                                <li class="feature-item">✓ 1 usuario</li>
+                                <li class="feature-item">✓ Soporte por email</li>
+                                <li class="feature-item">✗ Funciones avanzadas</li>
+                                <li class="feature-item">✗ Acceso móvil</li>
+                            </ul>
+                        </div>
+                        <div class="suscripcion-price">
+                            <p class="price">$9.99</p>
+                            <p class="period">por mes</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Plan Estándar -->
+                <div class="acordion-item">
+                    <div class="acordion-header">Plan Estándar</div>
+                    <div class="acordion-content">
+                        <div class="suscripcion-description">
+                            <p>Nuestro plan más popular, perfecto para equipos pequeños con necesidades completas.</p>
+                            <ul class="feature-list">
+                                <li class="feature-item">✓ Acceso completo</li>
+                                <li class="feature-item">✓ 3 usuarios</li>
+                                <li class="feature-item">✓ Soporte prioritario</li>
+                                <li class="feature-item">✓ Funciones avanzadas</li>
+                                <li class="feature-item">✓ Acceso móvil</li>
+                            </ul>
+                        </div>
+                        <div class="suscripcion-price">
+                            <p class="price">$19.99</p>
+                            <p class="period">por mes</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Plan Premium -->
+                <div class="acordion-item">
+                    <div class="acordion-header">Plan Premium</div>
+                    <div class="acordion-content">
+                        <div class="suscripcion-description">
+                            <p>El plan más completo, diseñado para equipos grandes que necesitan todas las funcionalidades.</p>
+                            <ul class="feature-list">
+                                <li class="feature-item">✓ Acceso completo</li>
+                                <li class="feature-item">✓ 10 usuarios</li>
+                                <li class="feature-item">✓ Soporte 24/7</li>
+                                <li class="feature-item">✓ Funciones avanzadas</li>
+                                <li class="feature-item">✓ Acceso móvil</li>
+                                <li class="feature-item">✓ Reportes personalizados</li>
+                            </ul>
+                        </div>
+                        <div class="suscripcion-price">
+                            <p class="price">$29.99</p>
+                            <p class="period">por mes</p>
+                        </div>
+                    </div>
+                </div>
+            </acordion>
+        </section>
+
+    </main>
+
+    <div id="notification" class="notification">
+        <span id="action-info"></span>
+    </div>
+
+    <footer>
+        <p>Tarea 4: Web Components - 2025-1-s1-g9-t4</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Listen for toggle events
+            document.addEventListener('acordion-toggle', (event) => {
+                const notification = document.getElementById('notification');
+                const actionInfo = document.getElementById('action-info');
+
+                actionInfo.textContent = `Sección "${event.detail.header}" ${event.detail.isOpen ? 'abierta' : 'cerrada'}`;
+                notification.classList.add('show');
+
+                // Hide the notification after 3 seconds
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            });
+        });
+    </script>
+</body>
+</html>

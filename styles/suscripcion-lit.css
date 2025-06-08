@@ -1,0 +1,99 @@
+:host {
+    display: block;
+    font-family: 'Arial', sans-serif;
+    --primary-color: #4a6da7;
+    --secondary-color: #2c3e50;
+    --accent-color: #e74c3c;
+    --light-color: #f8f9fa;
+    --border-radius: 8px;
+}
+
+.suscripcion-card {
+    background-color: var(--light-color);
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    margin: 1rem;
+    max-width: 300px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.suscripcion-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.suscripcion-header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 1.5rem;
+}
+
+.suscripcion-title {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.suscripcion-price {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin: 0.5rem 0;
+}
+
+.suscripcion-period {
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+.suscripcion-features {
+    padding: 1.5rem;
+    flex-grow: 1;
+}
+
+.suscripcion-features ::slotted(*) {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.suscripcion-feature {
+    margin: 0.8rem 0;
+    list-style-type: none;
+}
+
+.suscripcion-button {
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin: 1rem;
+    width: 80%;
+    align-self: center;
+}
+
+.suscripcion-button:hover {
+    background-color: #c0392b;
+}
+
+.featured {
+    transform: scale(1.05);
+}
+
+.featured .suscripcion-header {
+    background-color: var(--accent-color);
+}
+
+.featured .suscripcion-button {
+    background-color: var(--primary-color);
+}
+
+.featured .suscripcion-button:hover {
+    background-color: var(--secondary-color);
+}

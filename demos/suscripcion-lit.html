@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Componente Suscripción (Lit) - Demo</title>
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/suscripcion-demo.css">
+    <script type="module" src="../components/lit/suscripcion-lit.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Componente Suscripción (Lit)</h1>
+        <p><a href="../index.html">Volver al inicio</a></p>
+    </header>
+
+    <main>
+        <section>
+
+            <div class="suscripciones-container">
+                <!-- Plan Básico -->
+                <suscripcion-lit 
+                    title="Plan Básico" 
+                    price="$9.99" 
+                    period="por mes" 
+                    button-text="Elegir Plan">
+                    <ul slot="features" class="feature-list">
+                        <li class="feature-item">✓ Acceso básico</li>
+                        <li class="feature-item">✓ 1 usuario</li>
+                        <li class="feature-item">✓ Soporte por email</li>
+                        <li class="feature-item">✗ Funciones avanzadas</li>
+                        <li class="feature-item">✗ Acceso móvil</li>
+                    </ul>
+                </suscripcion-lit>
+
+                <!-- Plan Estándar -->
+                <suscripcion-lit 
+                    title="Plan Estándar" 
+                    price="$19.99" 
+                    period="por mes" 
+                    button-text="Elegir Plan"
+                    featured>
+                    <ul slot="features" class="feature-list">
+                        <li class="feature-item">✓ Acceso completo</li>
+                        <li class="feature-item">✓ 3 usuarios</li>
+                        <li class="feature-item">✓ Soporte prioritario</li>
+                        <li class="feature-item">✓ Funciones avanzadas</li>
+                        <li class="feature-item">✓ Acceso móvil</li>
+                    </ul>
+                </suscripcion-lit>
+
+                <!-- Plan Premium -->
+                <suscripcion-lit 
+                    title="Plan Premium" 
+                    price="$29.99" 
+                    period="por mes" 
+                    button-text="Elegir Plan">
+                    <ul slot="features" class="feature-list">
+                        <li class="feature-item">✓ Acceso completo</li>
+                        <li class="feature-item">✓ 10 usuarios</li>
+                        <li class="feature-item">✓ Soporte 24/7</li>
+                        <li class="feature-item">✓ Funciones avanzadas</li>
+                        <li class="feature-item">✓ Acceso móvil</li>
+                        <li class="feature-item">✓ Reportes personalizados</li>
+                    </ul>
+                </suscripcion-lit>
+            </div>
+        </section>
+
+    </main>
+
+    <div id="notification" class="notification">
+        Plan seleccionado: <span id="plan-info"></span>
+    </div>
+
+    <section id="plan-details-section" class="plan-details-section" style="display: none;">
+        <h2>Detalles del Plan Seleccionado</h2>
+        <div class="plan-details-container">
+            <h3 id="selected-plan-title">Título del Plan</h3>
+            <p id="selected-plan-price">Precio del Plan</p>
+            <p id="selected-plan-period" class="plan-period">Periodo</p>
+            <div class="plan-action">
+                <button id="confirm-plan-button" class="confirm-plan-button">Confirmar Selección</button>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>Tarea 4: Web Components - 2025-1-s1-g9-t4</p>
+    </footer>
+
+    <script>
+        // Listen for the suscripcion-selected event
+        document.addEventListener('suscripcion-selected', (event) => {
+            // Log to console for debugging
+            console.log('Event received:', event.detail);
+
+            // Get the notification elements
+            const notification = document.getElementById('notification');
+            const planInfo = document.getElementById('plan-info');
+
+            // Update the notification text
+            planInfo.textContent = `${event.detail.title} - ${event.detail.price}`;
+
+            // Show the notification
+            notification.classList.add('show');
+
+            // Hide the notification after 3 seconds
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+
+            // Update the permanent plan details section
+            const planDetailsSection = document.getElementById('plan-details-section');
+            const selectedPlanTitle = document.getElementById('selected-plan-title');
+            const selectedPlanPrice = document.getElementById('selected-plan-price');
+            const selectedPlanPeriod = document.getElementById('selected-plan-period');
+
+            // Find the component that was clicked
+            const components = document.querySelectorAll('suscripcion-lit');
+            let selectedComponent = null;
+
+            // Remove selected class from all components
+            components.forEach(component => {
+                component.classList.remove('selected-plan');
+            });
+
+            // Find and mark the selected component
+            components.forEach(component => {
+                if (component.getAttribute('title') === event.detail.title && 
+                    component.getAttribute('price') === event.detail.price) {
+                    selectedComponent = component;
+                    component.classList.add('selected-plan');
+                }
+            });
+
+            // Update the plan details
+            selectedPlanTitle.textContent = event.detail.title;
+            selectedPlanPrice.textContent = event.detail.price;
+
+            // Get the period from the component
+            if (selectedComponent) {
+                selectedPlanPeriod.textContent = selectedComponent.getAttribute('period');
+            } else {
+                selectedPlanPeriod.textContent = 'por mes';
+            }
+
+            // Show the plan details section
+            planDetailsSection.style.display = 'block';
+
+            // Add event listener to the confirm button
+            const confirmButton = document.getElementById('confirm-plan-button');
+            confirmButton.onclick = function() {
+                alert(`¡Has confirmado la selección del ${event.detail.title} por ${event.detail.price}!`);
+            };
+        });
+    </script>
+</body>
+</html>
