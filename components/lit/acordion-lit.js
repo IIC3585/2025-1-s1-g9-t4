@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'https://cdn.jsdelivr.net/gh/lit/dist@2/core/lit-core.min.js';
 
-// Import the CSS file
+console.log('🔥 Iniciando acordion-lit.js');
 const styleSheet = new CSSStyleSheet();
 fetch('../styles/acordion-lit.css')
   .then(response => response.text())
@@ -8,210 +8,150 @@ fetch('../styles/acordion-lit.css')
   .catch(err => console.error('Error loading CSS:', err));
 
 class AcordionLit extends LitElement {
-    static get properties() {
-        return {
-            singleOpen: { type: Boolean, attribute: 'single-open', reflect: true }
-        };
-    }
+  static properties = {
+    singleOpen: { type: Boolean, attribute: 'single-open', reflect: true }
+  };
 
-    static get styles() {
-        return css``;
-    }
+  static styles = css``;
 
-    constructor() {
-        super();
-        // Adopt the external stylesheet
-        this.constructor.elementStyles = [styleSheet];
-        this.singleOpen = false;
-    }
+  constructor() {
+    super();
+    this.constructor.elementStyles = [styleSheet];
+    this.singleOpen = false;
+    this._items = [];
+  }
 
-    render() {
-        return html`
-            <div class="acordion-container">
-                <slot @slotchange=${this._setupAccordion}></slot>
-            </div>
-        `;
-    }
+  render() {
+    return html`
+      <div class="acordion-container">
+        <slot id="slot" @slotchange=${this._onSlotChange}></slot>
+      </div>
+    `;
+  }
 
-    firstUpdated() {
-        this._setupAccordion();
-    }
+  _onSlotChange(e) {
+    console.log('[slotchange] Slot actualizado');
+    const slot = e.target;
+    this._items = slot.assignedElements().filter(el => el.classList.contains('acordion-item'));
+    this._setupAccordion();
+  }
 
-    _setupAccordion() {
-        setTimeout(() => {
-            console.log('Setting up accordion');
-            const items = this.querySelectorAll('.acordion-item');
-            console.log('Found accordion items:', items.length);
-
-            // Si singleOpen está activo, solo permite uno abierto, cierra los demás
-            if (this.singleOpen) {
-                let openedFound = false;
-                items.forEach(item => {
-                    const header = item.querySelector('.acordion-header');
-                    const content = item.querySelector('.acordion-content');
-
-                    if (item.hasAttribute('open') && !openedFound) {
-                        openedFound = true;
-                        header.classList.add('active');
-                        content.classList.add('active');
-                    } else {
-                        header.classList.remove('active');
-                        content.classList.remove('active');
-                    }
-                });
-            } else {
-                // Si no es singleOpen, abre solo los que tienen atributo 'open', cierra los demás
-                items.forEach(item => {
-                    const header = item.querySelector('.acordion-header');
-                    const content = item.querySelector('.acordion-content');
-
-                    if (item.hasAttribute('open')) {
-                        header.classList.add('active');
-                        content.classList.add('active');
-                    } else {
-                        header.classList.remove('active');
-                        content.classList.remove('active');
-                    }
-                });
-            }
-
-            // Agrega los event listeners
-            items.forEach((item, index) => {
-                const header = item.querySelector('.acordion-header');
-                if (header) {
-                    header.removeEventListener('click', this._handleHeaderClick);
-                    header.addEventListener('click', this._handleHeaderClick.bind(this));
-                }
-            });
-        }, 0);
-    }
+  _setupAccordion() {
+    if (!this._items.length) return;
 
 
-    _handleHeaderClick(event) {
-        const header = event.currentTarget;
-        const item = header.parentElement;
-        const content = item.querySelector('.acordion-content');
-        console.log('Header clicked:', header);
-
-        if (header && content) {
-            // Check if this header is already active
-            const isActive = header.classList.contains('active');
-            console.log('Is active:', isActive);
-
-            // Close all sections if single-open is true
-            if (this.singleOpen) {
-                const items = this.querySelectorAll('.acordion-item');
-                items.forEach(otherItem => {
-                    const otherHeader = otherItem.querySelector('.acordion-header');
-                    const otherContent = otherItem.querySelector('.acordion-content');
-
-                    if (otherHeader && otherContent) {
-                        otherHeader.classList.remove('active');
-                        otherContent.classList.remove('active');
-                    }
-                });
-            }
-
-            // Toggle current section
-            if (isActive && !this.singleOpen) {
-                console.log('Removing active class');
-                header.classList.remove('active');
-                content.classList.remove('active');
-            } else {
-                console.log('Adding active class');
-                header.classList.add('active');
-                content.classList.add('active');
-            }
-
-            console.log('Header classes after toggle:', header.className);
-            console.log('Content classes after toggle:', content.className);
-
-            // Dispatch custom event
-            this._dispatchToggleEvent(item, !isActive);
-        }
-    }
-
-    _dispatchToggleEvent(item, isOpen) {
+    if (this.singleOpen) {
+      let foundOpen = false;
+      this._items.forEach(item => {
         const header = item.querySelector('.acordion-header');
-        const headerText = header ? header.textContent.trim() : '';
+        const content = item.querySelector('.acordion-content');
 
-        this.dispatchEvent(new CustomEvent('acordion-toggle', {
-            bubbles: true,
-            composed: true,
-            detail: {
-                item: item,
-                header: headerText,
-                isOpen: isOpen
-            }
-        }));
-    }
-
-    // Public methods for programmatic control
-
-    openItem(index) {
-        const items = this.querySelectorAll('.acordion-item');
-        if (index >= 0 && index < items.length) {
-            const item = items[index];
-            const header = item.querySelector('.acordion-header');
-            const content = item.querySelector('.acordion-content');
-
-            if (header && content) {
-                // Close all if single-open is true
-                if (this.singleOpen) {
-                    items.forEach(otherItem => {
-                        const otherHeader = otherItem.querySelector('.acordion-header');
-                        const otherContent = otherItem.querySelector('.acordion-content');
-
-                        if (otherHeader && otherContent) {
-                            otherHeader.classList.remove('active');
-                            otherContent.classList.remove('active');
-                        }
-                    });
-                }
-
-                header.classList.add('active');
-                content.classList.add('active');
-
-                // Dispatch custom event
-                this._dispatchToggleEvent(item, true);
-            }
+        if (item.hasAttribute('open') && !foundOpen) {
+          header?.classList.add('active');
+          content?.classList.add('active');
+          foundOpen = true;
+        } else {
+          header?.classList.remove('active');
+          content?.classList.remove('active');
         }
-    }
 
-    closeItem(index) {
-        const items = this.querySelectorAll('.acordion-item');
-        if (index >= 0 && index < items.length) {
-            const item = items[index];
-            const header = item.querySelector('.acordion-header');
-            const content = item.querySelector('.acordion-content');
-
-            if (header && content) {
-                header.classList.remove('active');
-                content.classList.remove('active');
-
-                // Dispatch custom event
-                this._dispatchToggleEvent(item, false);
-            }
-        }
-    }
-
-    closeAll() {
-        const items = this.querySelectorAll('.acordion-item');
-        items.forEach((item, index) => {
-            this.closeItem(index);
+        header?.addEventListener('click', () => {
+            console.log('🟢 Header clickeado:', header.textContent);
+            this._handleHeaderClick(item);
         });
+
+        
+      });
+    } else {
+      this._items.forEach(item => {
+        const header = item.querySelector('.acordion-header');
+        const content = item.querySelector('.acordion-content');
+
+        if (item.hasAttribute('open')) {
+          header?.classList.add('active');
+          content?.classList.add('active');
+        } else {
+          header?.classList.remove('active');
+          content?.classList.remove('active');
+        }
+
+        header?.addEventListener('click', () => this._handleHeaderClick(item));
+      });
+    }
+  }
+
+  _handleHeaderClick(item) {
+    const header = item.querySelector('.acordion-header');
+    const content = item.querySelector('.acordion-content');
+    const isActive = header?.classList.contains('active');
+
+    if (this.singleOpen) {
+      this._items.forEach(i => {
+        const h = i.querySelector('.acordion-header');
+        const c = i.querySelector('.acordion-content');
+        h?.classList.remove('active');
+        c?.classList.remove('active');
+      });
     }
 
-    openAll() {
-        // Only open all if single-open is false
-        if (!this.singleOpen) {
-            const items = this.querySelectorAll('.acordion-item');
-            items.forEach((item, index) => {
-                this.openItem(index);
-            });
-        }
+    if (!isActive || !this.singleOpen) {
+      header?.classList.toggle('active');
+      content?.classList.toggle('active');
     }
+
+    this._dispatchToggleEvent(item, !isActive);
+  }
+
+  _dispatchToggleEvent(item, isOpen) {
+    const header = item.querySelector('.acordion-header');
+    const headerText = header ? header.textContent.trim() : '';
+
+    this.dispatchEvent(new CustomEvent('acordion-toggle', {
+      bubbles: true,
+      composed: true,
+      detail: { item, header: headerText, isOpen }
+    }));
+  }
+
+  openItem(index) {
+    console.log(this._items)
+    if (!this._items.length) return;
+    const item = this._items[index];
+    if (!item) return;
+
+    if (this.singleOpen) this.closeAll();
+
+    const header = item.querySelector('.acordion-header');
+    const content = item.querySelector('.acordion-content');
+    header?.classList.add('active');
+    content?.classList.add('active');
+    this._dispatchToggleEvent(item, true);
+  }
+
+  closeItem(index) {
+    console.log(this._items)
+    if (!this._items.length) return;
+    const item = this._items[index];
+    if (!item) return;
+
+    const header = item.querySelector('.acordion-header');
+    const content = item.querySelector('.acordion-content');
+    header?.classList.remove('active');
+    content?.classList.remove('active');
+    this._dispatchToggleEvent(item, false);
+  }
+
+  closeAll() {
+    console.log(this._items)
+    this._items.forEach((_, i) => this.closeItem(i));
+  }
+
+  openAll() {
+    console.log(this._items)
+    if (!this.singleOpen) {
+      this._items.forEach((_, i) => this.openItem(i));
+    }
+  }
 }
 
-// Define the custom element
 customElements.define('acordion-lit', AcordionLit);

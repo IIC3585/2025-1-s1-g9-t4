@@ -188,4 +188,4 @@ class Acordion extends HTMLElement {
 }
 
 // Define the custom element
-customElements.define('acordion', Acordion);
+customElements.define('acordion-component', Acordion);

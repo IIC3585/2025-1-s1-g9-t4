@@ -15,13 +15,17 @@
 }
 
 .acordion-container {
-    border: 1px solid var(--border-color);
     border-radius: 8px;
     background-color: var(--background-color);
+    padding: 5px 0;
 }
 
 ::slotted(.acordion-item) {
+    background-color: #ffffff;
     border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    margin: 5px 0;
+    border-radius: 4px;
 }
 
 ::slotted(.acordion-item:last-child) {
@@ -30,48 +34,52 @@
 
 ::slotted(.acordion-header) {
     padding: 15px 20px;
-    background-color: var(--background-color);
-    color: var(--secondary-color);
+    background-color: #ffffff;
+    color: #2c3e50;
     font-weight: bold;
     cursor: pointer;
+    border-bottom: 1px solid #e1e1e1;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    transition: background-color 0.3s;
     position: relative;
+    transition: background-color 0.3s;
 }
 
 ::slotted(.acordion-header:hover) {
     background-color: var(--hover-color);
 }
 
-::slotted(.acordion-header::after) {
-    content: '+';
-    font-size: 1.5rem;
-    transition: transform 0.3s;
-}
-
 ::slotted(.acordion-header.active) {
-    background-color: var(--primary-color);
+    background-color: #4a6da7;
     color: white;
 }
 
-::slotted(.acordion-header.active::after) {
-    content: '-';
-}
-
 ::slotted(.acordion-content) {
-    padding: 0;
+    background-color: #f8f9fa;
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+    padding: 0;
     display: block;
 }
 
 ::slotted(.acordion-content.active) {
     padding: 15px 20px;
-    max-height: 500px; /* Adjust as needed */
+    max-height: 1000px;
     display: block;
+}
+
+.acordion-header::after {
+    content: '+';
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.acordion-header.active::after {
+    content: '-';
 }
 
 .back-link {

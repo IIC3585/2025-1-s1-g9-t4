@@ -6,7 +6,13 @@
 .acordion-header {
     margin: 0;
     position: relative;
+    padding: 15px 20px;
     padding-right: 30px;
+    background-color: #ffffff;
+    color: #2c3e50;
+    font-weight: bold;
+    cursor: pointer;
+    border-bottom: 1px solid #e1e1e1;
 }
 
 .acordion-header::after {
@@ -17,12 +23,28 @@
     transform: translateY(-50%);
 }
 
+.acordion-header.active {
+    background-color: #4a6da7;
+    color: white;
+}
+
 .acordion-header.active::after {
     content: '-';
 }
 
 .acordion-content {
     background-color: #f8f9fa;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+    padding: 0;
+    display: block;
+}
+
+.acordion-content.active {
+    padding: 15px 20px;
+    max-height: 1000px;
+    display: block;
 }
 
 .acordion-content p {
@@ -130,7 +152,6 @@ input:checked + .toggle-slider:before {
     transform: translateX(26px);
 }
 
-/* Estilos para la información de suscripción en el acordeón */
 .suscripcion-description {
     margin-bottom: 20px;
 }
